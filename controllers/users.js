@@ -10,8 +10,8 @@ module.exports.register = async (req, res, next) => {
         const user = new User({ email, username });
         const registeredUser = await User.register(user, password);
         req.login(registeredUser, err => {
-            if (err) return next();
-            req.flash('success', 'Welcome to the community!');
+            if (err) return next(err);
+            req.flash('success', 'Welcome to Yelp Camp!');
             res.redirect('/campgrounds');
         })
     } catch (e) {
@@ -25,14 +25,15 @@ module.exports.renderLogin = (req, res) => {
 }
 
 module.exports.login = (req, res) => {
-    req.flash('success', 'Welcome back!');
-    const redirectUtl = req.session.returnTo || '/campgrounds';
+    req.flash('success', 'welcome back!');
+    const redirectUrl = req.session.returnTo || '/campgrounds';
     delete req.session.returnTo;
-    res.redirect(redirectUtl);
+    res.redirect(redirectUrl);
 }
 
 module.exports.logout = (req, res) => {
     req.logout();
-    req.flash('success', 'Goodbye!');
+    // req.session.destroy();
+    req.flash('success', "Goodbye!");
     res.redirect('/campgrounds');
 }
